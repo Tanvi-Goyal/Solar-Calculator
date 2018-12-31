@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "746814874041",
+    "firebase_url": "https://phasetime-28911.firebaseio.com",
+    "project_id": "phasetime-28911",
+    "storage_bucket": "phasetime-28911.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746814874041:android:0e7db5a590c555c8",
+        "android_client_info": {
+          "package_name": "com.tanvi.phasetime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746814874041-p8hmlrsh008rjknh1cm6gdvdfb75acto.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tanvi.phasetime",
+            "certificate_hash": "0133c4b8f8ef0b27650596ec2041aeae1eda1f75"
+          }
+        },
+        {
+          "client_id": "746814874041-shdrbt5rpqfd2bnp7g7qo0imbjgcbdem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqIvV6sKmW-iwsFEhezKcDOtEBHZGnU7k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746814874041-shdrbt5rpqfd2bnp7g7qo0imbjgcbdem.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
