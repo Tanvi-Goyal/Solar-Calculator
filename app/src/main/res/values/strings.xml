@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhaseTime</string>
+    <string name="app_name">SolarCalculator</string>
 
     <string name="google_maps_API_key">AIzaSyBr0zmOPQVCQ_aKiRHHIM4fuX5K8UMrZuc</string>
     <string name="selected_date">Date Here</string>
