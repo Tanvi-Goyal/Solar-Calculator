@@ -51,6 +51,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -122,8 +123,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private TextView moonset_textview;
     private int milisecondsDelay;
     DecimalFormat df;
-//    String from_activity = "";
-
+    private Marker marker;
+    String from_activity ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,24 +142,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         date_forward_button = findViewById(R.id.date_forward_btn);
         date_backward_button = findViewById(R.id.date_backward_btn);
 
-//        String from_activity = getIntent().getStringExtra("from_activity");
-//        if(from_activity!=null) {
-//            if(from_activity.equals("Adapter")){
-//                latitude = getIntent().getDoubleExtra("latitude",0.0 );
-//                longitude = getIntent().getDoubleExtra("longitude" , 0.0);
-//                locateSavedavedPins(latitude,longitude);
-//            }
-//        }
-
+        df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
 
         final Calendar cal = Calendar.getInstance();
         year_x = cal.get(Calendar.YEAR);
         month_x = cal.get(Calendar.MONTH);
         day_x = cal.get(Calendar.DAY_OF_MONTH);
-        df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
 
         date_textview.setText(day_x + "/" + month_x + "/" + year_x);
+
+
+         from_activity = this.getIntent().getStringExtra("from_activity");
+        if(from_activity!=null) {
+            if(from_activity.equals("Adapter")){
+                initMap();
+
+
+            }
+        }
+
+
 
         getLocationPermission();
 
@@ -251,6 +255,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             date_textview.setText(day_x + "/" + month_x + "/" + year_x);
             Date date = new Date(year_x , month_x-1, day_x);
             Log.wtf(TAG , date.toString());
+            getSunRiseSunSetTime();
+            getMoonRiseMoonSetTime(date , latitude , longitude);
         }
     };
 
@@ -266,17 +272,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
-            getDeviceLocation();
+            if(from_activity==null){
+                getDeviceLocation();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+                init();
+            }else{
+
+                latitude = getIntent().getDoubleExtra("latitude",0.0 );
+                longitude = getIntent().getDoubleExtra("longitude" , 0.0);
+//                getLocationPermission();
+                updateMap(new LatLng(latitude, longitude));
+                locateSavedavedPins(latitude,longitude);
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+//                init();
             }
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            init();
         }
     }
 
@@ -579,9 +605,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public  void locateSavedavedPins(Double latitude, Double longitude) {
 
+//        moveCamera(new LatLng(latitude, longitude), DEFAULT_ZOOM,
+//                "");
+
         Date date = new Date(MapActivity.year_x , MapActivity.month_x, MapActivity.day_x);
         getSunRiseSunSetTime();
         getMoonRiseMoonSetTime(date , latitude,longitude);
+    }
+
+    public void updateMap(LatLng position) {
+        mMap.clear();
+        marker = mMap.addMarker(new MarkerOptions().position(position)
+                .title("Marker in position")
+                .draggable(true));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position,13));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(position)      // Sets the center of the map to location user
+                .zoom(18)                   // Sets the zoom
+                .bearing(90)                // Sets the orientation of the camera to east
+                .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     private void getMoonRiseMoonSetTime(Date currentDate, double latitude, double longitude) {

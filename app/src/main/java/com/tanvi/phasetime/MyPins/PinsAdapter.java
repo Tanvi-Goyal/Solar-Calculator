@@ -59,6 +59,11 @@ class PinsAdapter extends RecyclerView.Adapter<PinsAdapter.ViewHolder> {
 
     }
 
+    public double[] getGeoLocation(int position) {
+        MyPinDataClass currentPin = mData.get(position);
+        return new double[]{currentPin.getLatitude(),currentPin.getLongitude()};
+    }
+
     @Override
     public int getItemCount() {
         return mData.size();
