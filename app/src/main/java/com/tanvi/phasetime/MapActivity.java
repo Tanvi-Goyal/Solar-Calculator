@@ -2,11 +2,13 @@ package com.tanvi.phasetime;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -60,6 +62,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tanvi.phasetime.MyPins.MyPinDataClass;
 import com.tanvi.phasetime.MyPins.MyPins;
 
@@ -150,7 +153,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         month_x = cal.get(Calendar.MONTH);
         day_x = cal.get(Calendar.DAY_OF_MONTH);
 
-        date_textview.setText(day_x + "/" + month_x + "/" + year_x);
+        date_textview.setText(day_x + "/" + month_x+1 + "/" + year_x);
 
 
          from_activity = this.getIntent().getStringExtra("from_activity");
@@ -162,8 +165,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
 
-
-
         getLocationPermission();
 
         showDialogOnButtonClick();
@@ -171,7 +172,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-//    private void dateBackAndAhead(final int day_x, final int month_x, final int year_x) {
+
+
+    //    private void dateBackAndAhead(final int day_x, final int month_x, final int year_x) {
 //
 //        date_backward_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -398,34 +401,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void geoLocate(){
+
         Log.d(TAG, "geoLocate: geolocating");
+        if(from_activity!=null){
+            Toast.makeText(this, "You have decided to view the previously saved Location", Toast.LENGTH_SHORT).show();
+        }else{
 
-        String searchString = mSearchText.getText().toString();
+            String searchString = mSearchText.getText().toString();
 
-        Geocoder geocoder = new Geocoder(MapActivity.this);
-        List<Address> list = new ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+            Geocoder geocoder = new Geocoder(MapActivity.this);
+            List<Address> list = new ArrayList<>();
+            try{
+                list = geocoder.getFromLocationName(searchString, 1);
+            }catch (IOException e){
+                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+            }
+
+            if(list.size() > 0){
+                Address address = list.get(0);
+
+                Log.d(TAG, "geoLocate: found a location: " + address.toString());
+                //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+
+                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
+                        address.getAddressLine(0));
+
+                Date date = new Date(year_x , month_x-1, day_x);
+
+                getSunRiseSunSetTime();
+                getMoonRiseMoonSetTime(date , address.getLatitude() , address.getLongitude());
+                MyPinDataClass pin = new MyPinDataClass(address.toString(), address.getLatitude(), address.getLongitude());
+                SavePins(pin);
+            }
         }
 
-        if(list.size() > 0){
-            Address address = list.get(0);
-
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-
-            Date date = new Date(year_x , month_x-1, day_x);
-
-            getSunRiseSunSetTime();
-            getMoonRiseMoonSetTime(date , address.getLatitude() , address.getLongitude());
-            MyPinDataClass pin = new MyPinDataClass(address.toString(), address.getLatitude(), address.getLongitude());
-            SavePins(pin);
-        }
     }
 
     private void getDeviceLocation(){
@@ -796,9 +805,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Log.d(TAG, "onResult: latlng: " + place.getLatLng());
                 mPlace.setRating(place.getRating());
                 Log.d(TAG, "onResult: rating: " + place.getRating());
-                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
+//                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
                 Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
-                mPlace.setWebsiteUri(place.getWebsiteUri());
+//                mPlace.setWebsiteUri(place.getWebsiteUri());
                 Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
 
                 Log.d(TAG, "onResult: place: " + mPlace.toString());
