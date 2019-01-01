@@ -1,53 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:padding="10dp"
+    android:id="@+id/model"
+    android:background="@color/white"
+    android:weightSum="1">
 
-
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="71dp"
-        android:layout_height="53dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:gravity="center"
-        android:layout_marginTop="0dp"
-        android:text="TextView"
-        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/location"
-        android:layout_width="287dp"
-        android:layout_height="51dp"
-        android:gravity="center"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="97dp"
-        android:text="TextView"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/sunrise"
-        android:layout_width="287dp"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/location"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="29dp"
-        android:text="TextView"
+        android:text="Location"
+        android:layout_gravity="center"
         android:textColor="@android:color/black" />
 
-    <TextView
-        android:id="@+id/sunset"
-        android:layout_width="287dp"
-        android:gravity="center"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.25"
+        android:weightSum="1"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/location"
-        android:layout_alignParentBottom="true"
-        android:text="TextView"
-        android:textColor="@android:color/black" />
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/latitude_textview"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="Latitude"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/latitude"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.25"
+        android:weightSum="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/longitude_textview"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="Longitude"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/longitude"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

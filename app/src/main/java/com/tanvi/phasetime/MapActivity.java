@@ -107,17 +107,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Marker mMarker;
     ImageButton date_picker_button ;
     private View alertLayout;
-    int year_x , month_x , day_x;
+    public static int year_x , month_x , day_x;
     TextView date_textview;
 
-    private double latitude;
-    private double longitude;
+    public static double latitude;
+    public static double longitude;
     private TextView sunrise_textView;
     private TextView sunset_textView;
     private TextView moonrise_textview;
     private TextView moonset_textview;
     private int milisecondsDelay;
     DecimalFormat df;
+//    String from_activity = "";
 
 
     @Override
@@ -133,6 +134,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         moonrise_textview = findViewById(R.id.moon_rise_textview);
         moonset_textview = findViewById(R.id.moon_set_textview);
         date_textview = findViewById(R.id.date);
+
+//        String from_activity = getIntent().getStringExtra("from_activity");
+//        if(from_activity!=null) {
+//            if(from_activity.equals("Adapter")){
+//                latitude = getIntent().getDoubleExtra("latitude",0.0 );
+//                longitude = getIntent().getDoubleExtra("longitude" , 0.0);
+//                locateSavedavedPins(latitude,longitude);
+//            }
+//        }
+
 
         final Calendar cal = Calendar.getInstance();
         year_x = cal.get(Calendar.YEAR);
@@ -332,6 +343,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             getSunRiseSunSetTime();
             getMoonRiseMoonSetTime(date , address.getLatitude() , address.getLongitude());
+            MyPinDataClass pin = new MyPinDataClass(address.toString(), address.getLatitude(), address.getLongitude());
+            SavePins(pin);
         }
     }
 
@@ -510,6 +523,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    public  void locateSavedavedPins(Double latitude, Double longitude) {
+
+        Date date = new Date(MapActivity.year_x , MapActivity.month_x, MapActivity.day_x);
+        getSunRiseSunSetTime();
+        getMoonRiseMoonSetTime(date , latitude,longitude);
+    }
 
     private void getMoonRiseMoonSetTime(Date currentDate, double latitude, double longitude) {
 
@@ -665,8 +684,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             final Place place = places.get(0);
 
-            MyPinDataClass pin = new MyPinDataClass(String.valueOf(place.getName()), longitude, latitude);
-            SavePins(pin);
 
             try {
                 mPlace = new PlaceInfo();
@@ -694,6 +711,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 longitude = place.getLatLng().longitude;
                 getSunRiseSunSetTime();
                 getMoonRiseMoonSetTime(date , latitude , longitude);
+                MyPinDataClass pin = new MyPinDataClass(String.valueOf(place.getName()), longitude, latitude);
+                SavePins(pin);
 
             }catch (NullPointerException e){
                 Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
