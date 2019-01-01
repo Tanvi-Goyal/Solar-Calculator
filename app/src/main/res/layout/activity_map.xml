@@ -211,7 +211,8 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/id"
+                        android:id="@+id/date_backward_btn"
+                        android:visibility="invisible"
                         android:src="@drawable/ic_fast_rewind_black_24dp"
                         android:background="@null"/>
 
@@ -225,7 +226,8 @@
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/date_ahead"
+                        android:id="@+id/date_forward_btn"
+                        android:visibility="invisible"
                         android:src="@drawable/ic_fast_forward_black_24dp"
                         android:background="@null"/>
                 </LinearLayout>

@@ -62,12 +62,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.tanvi.phasetime.MyPins.MyPinDataClass;
 import com.tanvi.phasetime.MyPins.MyPins;
 
+import org.joda.time.DateTime;
 import org.shredzone.commons.suncalc.MoonTimes;
 import org.shredzone.commons.suncalc.SunTimes;
 
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,6 +108,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private PlaceInfo mPlace;
     private Marker mMarker;
     ImageButton date_picker_button ;
+    ImageButton date_forward_button ;
+    ImageButton date_backward_button ;
     private View alertLayout;
     public static int year_x , month_x , day_x;
     TextView date_textview;
@@ -134,6 +138,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         moonrise_textview = findViewById(R.id.moon_rise_textview);
         moonset_textview = findViewById(R.id.moon_set_textview);
         date_textview = findViewById(R.id.date);
+        date_forward_button = findViewById(R.id.date_forward_btn);
+        date_backward_button = findViewById(R.id.date_backward_btn);
 
 //        String from_activity = getIntent().getStringExtra("from_activity");
 //        if(from_activity!=null) {
@@ -157,8 +163,56 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
 
         showDialogOnButtonClick();
+//        dateBackAndAhead(day_x,month_x,year_x);
 
     }
+
+//    private void dateBackAndAhead(final int day_x, final int month_x, final int year_x) {
+//
+//        date_backward_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Date dateBack = new Date(year_x , month_x, day_x);
+//                Calendar calBack = Calendar.getInstance();
+//                calBack.setTime(dateBack);
+//                calBack.add(Calendar.DATE, -1); // subtract 1 day
+//
+//                dateBack = calBack.getTime();
+//                Log.d(TAG, "dateBackAndAhead: Added date" + dateBack.toString());
+//
+//
+//            }
+//        });
+//
+//
+//        date_forward_button.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            public void onClick(View v) {
+////                Date dateAhead = new Date(year_x , month_x, day_x);
+////                Calendar calAhead = Calendar.getInstance();
+////                calAhead.setTime(dateAhead);
+////                calAhead.add(Calendar.DAY_OF_YEAR, 1); // add 1 day
+////
+////                dateAhead = calAhead.getTime();
+////                Log.d(TAG, "dateBackAndAhead: Added date" + dateAhead.getDay());
+////                date_textview.setText(dateAhead.getDay() + "/" + dateAhead.getMonth()+1 + "/" + dateAhead.getYear());
+//
+//
+//                Date dt = new Date(year_x , month_x, day_x);
+//                DateTime dtOrg = new DateTime(dt);
+//                DateTime dtPlusOne = dtOrg.plusDays(1);
+//                Log.d(TAG, "onClick: ahead" + dtPlusOne.dayOfYear()+ "/" + dtPlusOne.getMonthOfYear() + "/" + dtPlusOne.getYear());
+//                date_textview.setText(dtPlusOne.dayOfYear()+ "/" + dtPlusOne.getMonthOfYear() + "/" + dtPlusOne.getYear());
+//                dateBackAndAhead(dtPlusOne.getDayOfYear(),dtPlusOne.getMonthOfYear() ,dtPlusOne.getYear());
+//
+////
+////                Date dt = new Date(year_x , month_x, day_x);
+////                Log.d(TAG, "onClick: " + LocalDateTime.from(dt.toInstant()).plusDays(1));
+//            }
+//        });
+//
+//    }
 
     //------ Date Select Module------//
 
